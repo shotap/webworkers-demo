@@ -1,5 +1,5 @@
 var consoleLog = function(token){
-    document.querySelector('.console').innerHTML += '<div>' + token + '</div>';
+    document.querySelector('.console').innerHTML = '<div>' + token + '</div>' + document.querySelector('.console').innerHTML;
 }
 
 // Init the worker

@@ -44,7 +44,7 @@ ol, ul {
 body { background-color: #e2e2e2}
 
 .console {
-	display: none; position: absolute; top: 20px; right: 20px; height: 500px; width: 300px;
+	display: none; position: absolute; top: 20px; right: 20px; bottom: 20px; overflow: auto; width: 300px;
 	background: #fff; border: 2px solid #f06; box-sizing: border-box;
     font-family: Menlo, monospace; font-size: 15px; line-height: 20px;
 }
