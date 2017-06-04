@@ -43,7 +43,25 @@ ol, ul {
 * { font-family: Arial }
 body { background-color: #e2e2e2}
 
-.main-wrapper { 
+.console {
+	display: none; position: absolute; top: 20px; right: 20px; height: 500px; width: 300px;
+	background: #fff; border: 2px solid #f06; box-sizing: border-box;
+    font-family: Menlo, monospace; font-size: 15px; line-height: 20px;
+}
+.console::before {
+	content: 'Console';
+    color: #f06; font-weight: bold;padding: 5px;
+    border-bottom: 1px solid #f06;width: 100%;display: block;
+}
+.console div {
+	border-bottom: 1px solid #ddd; padding: 2px 0 1px 4px;
+}
+.console-btn { 
+	position: absolute; right: 10px; bottom: 10px; padding: 5px 10px;
+	background: #fff; border: 2px solid #f06;
+}
+
+.main-wrapper {
     display: flex;margin: 0 auto; width: 70%; background: #fff; 
     border: 10px solid #f06; border-top: 0; border-bottom: 0; padding: 10px;
     position: absolute; top: 0; right: 0; left: 0; bottom: 0;
@@ -53,10 +71,11 @@ body { background-color: #e2e2e2}
 
 .nav header { font-size: 1.3em; font-weight: bolder; color: #f06; text-align: center; }
 
-#albumList li { background-color: #f7f7f7; border: 1px solid rgba(255, 0, 102, 0.2);; margin: 10px 0; padding: 10px; cursor: pointer; }
+#albumList li { background-color: #f7f7f7; border: 1px solid rgba(255, 0, 102, 0.2); margin: 10px 0; padding: 10px; cursor: pointer; }
 
 #photosList { display: flex; flex-wrap: wrap; }
 #photosList li { width: calc(100%/3 - 20px); text-align: center; padding: 0 10px; margin: 10px 0; }
 #photosList li img { border-radius: 50%; }
 
-
+.open-console .main-wrapper { right: 300px; }
+.open-console .console { display: block; }

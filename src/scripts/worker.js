@@ -9,7 +9,7 @@ self.addEventListener('connect', function (e) {
 	port.addEventListener('message', function (e) {
     var route = e.data['route'];
     if (cache[route]){
-      port.postMessage('"' + route + '" from cache');
+      port.postMessage('[' + route + '] from cache');
       port.postMessage(cache[route]);
     } else {
       var req = new XMLHttpRequest();

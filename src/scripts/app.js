@@ -1,24 +1,52 @@
-// Init the worker
-var cacheWorker = new SharedWorker('src/scripts/worker.js');
-var cb = {};
-cacheWorker.port.addEventListener('message', function(e) {
-	var res = e.data;
-    if (res['success']){
-        cb[res['route']](res['data']);
-    } else {
-        console.log(res);
-    }
-}, false);
-cacheWorker.port.start();
-
-getXHR = function(route, _cb){
-    cb[route] = _cb;
-    cacheWorker.port.postMessage({
-        route: route
-    });
+var consoleLog = function(token){
+    document.querySelector('.console').innerHTML += '<div>' + token + '</div>';
 }
 
-getPhotosByAlbum = function(albumId){
+// Init the worker
+var cacheWorker;
+if (window.SharedWorker){
+    cacheWorker = new SharedWorker('src/scripts/worker.js');
+} else {
+    cacheWorker = null;
+    consoleLog('no SharedWorker - working normal');
+}
+var cb = {};
+var timers = {};
+var apiBasePath = 'https://jsonplaceholder.typicode.com/';
+
+if (cacheWorker){
+    cacheWorker.port.addEventListener('message', function(e) {
+        var res = e.data;
+        if (res['success']){
+            cb[res['route']](res['data']);
+
+            var now = new Date();
+            consoleLog('[' + res['route'] + '] ' + (now - timers[res['route']]) + 'ms');
+        } else {
+            consoleLog(res);
+        }
+    }, false);
+    cacheWorker.port.start();
+}
+
+var getXHR = function(route, _cb){
+    if (cacheWorker){
+        cb[route] = _cb;
+        timers[route] = new Date();
+        cacheWorker.port.postMessage({
+            route: route
+        });
+    } else { //fallback
+        var req = new XMLHttpRequest();
+        req.addEventListener('load', function(){
+            _cb(JSON.parse(this.responseText));
+        });
+        req.open('GET', apiBasePath + route);
+        req.send();
+    }
+}
+
+var getPhotosByAlbum = function(albumId){
     getXHR('photos?albumId=' + albumId, function(photos){
         var photosListElem = document.querySelector('#photosList');
         photosListElem.innerHTML = '';
@@ -38,7 +66,6 @@ getPhotosByAlbum = function(albumId){
     });
 }
 
-// Load the album list
 getXHR('albums', function(albums){
     var albumListElem = document.querySelector('#albumList');
 
@@ -54,3 +81,7 @@ getXHR('albums', function(albums){
         });
     }, this);
 });
+
+document.querySelector('.console-btn').addEventListener('click', function(){
+    document.body.classList.toggle('open-console');
+})
