@@ -6,7 +6,7 @@ var consoleLog = function(token){
 var cacheWorker;
 if (window.SharedWorker){
     cacheWorker = new SharedWorker('src/scripts/worker.js');
-} else {
+} else { // fallback
     cacheWorker = null;
     consoleLog('no SharedWorker - working normal');
 }
@@ -15,6 +15,7 @@ var timers = {};
 var apiBasePath = 'https://jsonplaceholder.typicode.com/';
 
 if (cacheWorker){
+    // listen to the worker msgs
     cacheWorker.port.addEventListener('message', function(e) {
         var res = e.data;
         if (res['success']){
@@ -29,6 +30,7 @@ if (cacheWorker){
     cacheWorker.port.start();
 }
 
+// get XHR data via the worker
 var getXHR = function(route, _cb){
     if (cacheWorker){
         cb[route] = _cb;

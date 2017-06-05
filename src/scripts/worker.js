@@ -6,6 +6,7 @@ self.addEventListener('connect', function (e) {
 	var port = e.ports[0];
 	connections++;
 
+  // listen to the apps msgs
 	port.addEventListener('message', function (e) {
     var route = e.data['route'];
     if (cache[route]){
