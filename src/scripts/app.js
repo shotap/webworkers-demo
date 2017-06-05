@@ -10,6 +10,7 @@ if (window.SharedWorker){
     cacheWorker = null;
     consoleLog('no SharedWorker - working normal');
 }
+
 var cb = {};
 var timers = {};
 var apiBasePath = 'https://jsonplaceholder.typicode.com/';
